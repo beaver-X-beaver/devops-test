@@ -1,0 +1,34 @@
+---
+name: Main CI - Rust
+on:
+  push:
+    branches: [ $default-branch ]
+env:
+  CARGO_TERM_COLOR: always
+  # CARGO_HOME:
+  # RUSTFLAGS: 
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: rustup component add clippy
+      - uses: actions-rs/clippy-check@v1
+        # Last step can be hard coded as a "run" statement
+        # But this module provides more interesting functionality
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --all-features
+#  test:
+#    needs: lint
+#
+#  build:
+#    needs: test
+#
+#  publish:
+#    needs: build
