@@ -59,7 +59,7 @@ jobs:
 #       BETWEEN LIBS 1,2 AND 3. HOWEVER, THIS STEP WOULD SAVE US SOME TIME FOR
 #       A LARGER RUST LANG PRODUCT
       - name: Build
-        run: cargo build --release
+        run: cargo build --release --workspace
         env: ${{ matrix.env }}
       - name: Test
         run: cargo test

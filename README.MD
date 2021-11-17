@@ -1,7 +1,9 @@
 # Jolocom DevOps CI test
-#
+![Main Branch CI](https://github.com/beaver-X-beaver/devops-test/actions/workflows/ci.yml/badge.svg?branch=main)
 ## Progress:
-Lint Stage Done
+- Lint Stage Done
+- Builds For MacOS, Windows and Linux Done
+- Status Badge Done
 ## Description
 Create CI, which will run unit tests, build with release configuration, collect platform specific binary libraries and publish them as release artefact.
 ## Detailed steps
