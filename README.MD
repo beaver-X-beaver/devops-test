@@ -1,4 +1,7 @@
 # Jolocom DevOps CI test
+#
+## Progress:
+Lint Stage Done
 ## Description
 Create CI, which will run unit tests, build with release configuration, collect platform specific binary libraries and publish them as release artefact.
 ## Detailed steps
