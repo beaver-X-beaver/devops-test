@@ -40,7 +40,7 @@ jobs:
             os: ubuntu-latest
             # If needed, same for the other env dicts
             env: {}
-          - name: x86-64-pc-windows-gnu
+          - name: x86-64-pc-windows-msvc
             os: windows-latest
             env: {}
           - name: x86_64-apple-darwin
