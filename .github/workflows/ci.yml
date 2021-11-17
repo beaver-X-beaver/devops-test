@@ -37,11 +37,11 @@ jobs:
       matrix:
         include:
           - name: x86_64-unknown-linux-gnu
-            os: ubuntu-latest-x1
+            os: ubuntu-latest
             # If needed, same for the other env dicts
             env: {}
           - name: x86-64-pc-windows-gnu
-            os: windows-latest-x1
+            os: windows-latest
             env: {}
           - name: x86_64-apple-darwin
             os: macos-latest
@@ -51,7 +51,7 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
       - name: Dump toolchain target
-        run: rustup toolchain list | grep installed
+        run: rustup target list | grep installed
       - name: Build
         run: cargo build
       - name: Test
