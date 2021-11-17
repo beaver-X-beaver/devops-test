@@ -1,4 +1,8 @@
 ---
+###
+### I am using the Rust Lang official CI as inspiration for this workflow
+### https://github.com/rust-lang/rust/blob/master/.github/workflows/ci.yml
+###
 name: Main CI - Rust
 on:
   push:
@@ -16,19 +20,42 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - run: rustup component add clippy
-      - uses: actions-rs/clippy-check@v1
+      - name: Checkout source code 
+        uses: actions/checkout@v2
+      - name: Add clippy component to rustup
+        run: rustup component add clippy
+      - name: Execute linting process
+        uses: actions-rs/clippy-check@v1
         # Last step can be hard coded as a "run" statement
         # But this module provides more interesting functionality
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features
-#  test:
-#    needs: lint
-#
-#  build:
-#    needs: test
+  build:
+    needs: lint
+    strategy:
+      matrix:
+        include:
+          - name: x86_64-unknown-linux-gnu
+            os: ubuntu-latest-x1
+            # If needed, same for the other env dicts
+            env: {}
+          - name: x86-64-pc-windows-gnu
+            os: windows-latest-x1
+            env: {}
+          - name: x86_64-apple-darwin
+            os: macos-latest
+            env: {}
+    runs-on: "${{ matrix.os }}"
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Dump toolchain target
+        run: rustup toolchain list | grep installed
+      - name: Build
+        run: cargo build
+      - name: Test
+        run: cargo test
 #
 #  publish:
 #    needs: build
