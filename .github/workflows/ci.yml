@@ -9,8 +9,6 @@ on:
     branches: main
 env:
   CARGO_TERM_COLOR: always
-  # CARGO_HOME:
-  # RUSTFLAGS: 
 
 defaults:
   run:
@@ -24,6 +22,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Add clippy component to rustup
         run: rustup component add clippy
+        if: success()
       - name: Execute linting process
         uses: actions-rs/clippy-check@v1
         # Last step can be hard coded as a "run" statement
@@ -31,6 +30,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --all-features
+        if: success()
   build:
     needs: lint
     strategy:
@@ -52,17 +52,21 @@ jobs:
         uses: actions/checkout@v2
       - name: Dump toolchain target
         run: rustup target list | grep installed
+        if: success()
 #     - name: Install sccache to share dependency caches
 #       run: cargo install sccache && export RUSTC_WRAPPER=sccache
 #     
 #       THIS STEP IS NOT NEEDED AS THE WORKPLACE DOES NOT SHARE DEPENDENCIES
 #       BETWEEN LIBS 1,2 AND 3. HOWEVER, THIS STEP WOULD SAVE US SOME TIME FOR
 #       A LARGER RUST LANG PRODUCT
+#
       - name: Build
         run: cargo build --release --workspace
         env: ${{ matrix.env }}
+        if: success()
       - name: Test
         run: cargo test
+        if: success()
 #     - name: Cache dependecies
 #       uses: actions/cache@v2
 #       with:
@@ -75,6 +79,17 @@ jobs:
 #        AND THERE ARE NO EXTERNAL PACKAGES NEEDED AS DEPENDENCIES. HOWEVER,
 #        THIS STEP WOULD SAVE US SOME TIME IN FOR A LARGER PRODUCT
 #          
-#
-#  publish:
-#    needs: build
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: devops-test-task-${{ github.run_number }}-${{ matrix.name }}
+          path: target/release
+          retention-days: 5
+        if: success()
+
+      - name: Publish Crates to crates.io
+        run: cargo publish --dry-run --token $TOKEN
+#       DONT USE --dry-run IF YOU REALLY WANT TO PUBLISH
+        env:
+          TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
+        if: success()
