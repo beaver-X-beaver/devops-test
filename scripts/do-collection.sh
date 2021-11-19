@@ -26,7 +26,7 @@ list=$(cargo b -q --message-format json | jq -r '
 
 NARGS=$(echo $list | wc -w)
 
-echo $list | xargs -n $NARGS tar -cf $(pwd)/target/release/projects.tar
+echo $list | xargs -n $NARGS tar -cf $(pwd)/target/release/projects.tar 1> /dev/null
 
 echo Done
 
