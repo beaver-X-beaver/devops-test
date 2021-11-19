@@ -79,6 +79,10 @@ jobs:
 #        AND THERE ARE NO EXTERNAL PACKAGES NEEDED AS DEPENDENCIES. HOWEVER,
 #        THIS STEP WOULD SAVE US SOME TIME IN FOR A LARGER PRODUCT
 #          
+      - name: Execute Post-build script
+        run: scripts/do-collection.sh
+        if: success()
+          
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -88,7 +92,7 @@ jobs:
         if: success()
 
       - name: Publish Crates to crates.io
-        run: cargo publish --dry-run --token $TOKEN
+        run: cargo publish --token $TOKEN
 #       DONT USE --dry-run IF YOU REALLY WANT TO PUBLISH
         env:
           TOKEN: ${{ secrets.CRATES_IO_TOKEN }}

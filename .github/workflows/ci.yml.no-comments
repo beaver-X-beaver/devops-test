@@ -60,7 +60,6 @@ jobs:
           path: target/release
           retention-days: 5
         if: success()
-
       - name: Publish Crates to crates.io
         run: cargo publish --dry-run --token $TOKEN
         env:
