@@ -92,7 +92,7 @@ jobs:
         if: success()
 
       - name: Publish Crates to crates.io
-        run: cargo publish --token $TOKEN
+        run: cargo publish --token $TOKEN --target ${{ matrix.name }}
 #       DONT USE --dry-run IF YOU REALLY WANT TO PUBLISH
         env:
           TOKEN: ${{ secrets.CRATES_IO_TOKEN }}
